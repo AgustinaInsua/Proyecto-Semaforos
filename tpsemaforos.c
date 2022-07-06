@@ -80,7 +80,7 @@ void * cortar ( void *data) {
 	imprimirAccion (mydata, accion);
 	// uso sleep para simular que que pasa tiempo
 	sleep ( 3 );
-	// doy la seÃƒÂ±al a la siguiente accion
+	// doy la señal a la siguiente accion
         sem_post (& mydata-> semaforos_param . sem_mezclar );
 
     pthread_exit ( NULL );
@@ -96,7 +96,7 @@ void * mezclar ( void *data) {
 	imprimirAccion (mydata, accion);
 	// uso sleep para simular que que pasa tiempo
 	sleep ( 3 );
-	// doy la seÃƒÂ±al a la siguiente accion
+	// doy la señal a la siguiente accion
         sem_post (& mydata-> semaforos_param . sem_salar );
 
     pthread_exit ( NULL );
@@ -113,7 +113,7 @@ void * salar ( void *data) {
 	imprimirAccion (mydata, accion);
 	// uso sleep para simular que que pasa tiempo
 	sleep ( 3 );
-	// doy la seÃƒÂ±al a la siguiente accion
+	// doy la señal a la siguiente accion
         sem_post (& mydata-> semaforos_param . sem_agregarCarne );
         sem_post (& mydata-> semaforos_param . sem_armarSanguche1);
         //desbloqueo el salero para que otro equipo pueda utilizarlo
@@ -130,7 +130,7 @@ void * agregarCarne ( void *data) {
 	imprimirAccion (mydata, accion);
 	// uso sleep para simular que que pasa tiempo
 	sleep ( 3 );
-	// doy la seÃƒÂ±al a la siguiente accion
+	// doy la señal a la siguiente accion
         sem_post (& mydata-> semaforos_param . sem_empanarMilanesas );
 
     pthread_exit ( NULL );
@@ -145,7 +145,7 @@ void * empanarMilanesas ( void *data) {
 	imprimirAccion (mydata, accion);
 	// uso sleep para simular que que pasa tiempo
 	sleep ( 6);
-	// doy la seÃƒÂ±al a la siguiente accion
+        //doy la señal a la siguiente accion
         sem_post (& mydata-> semaforos_param . sem_cocinarEnSarten );
 
     pthread_exit ( NULL );
@@ -163,7 +163,7 @@ void * cocinarEnSarten ( void *data) {
 	imprimirAccion (mydata, accion);
 	// uso sleep para simular que que pasa tiempo
 	sleep ( 8 );
-	// doy la seÃƒÂ±al a la siguiente accion
+        //doy la señal a la siguiente accion
         sem_post (& mydata-> semaforos_param . sem_cortarExtras );
         //desbloqueo la sarten para que otro equipo pueda utilizarlo
         pthread_mutex_unlock(&mutex_cocinarEnSarten);
@@ -200,7 +200,7 @@ void * cortarExtras ( void *data) {
        imprimirAccion (mydata, accion);
        // uso sleep para simular que que pasa tiempo
        sleep ( 3 );
-       // doy la seÃƒÂ±al a la siguiente accion (cortar me habilita mezclar)
+      //doy la señal a la siguiente accion
        sem_post (& mydata-> semaforos_param . sem_armarSanguche3);
     pthread_exit ( NULL );
 }
@@ -234,8 +234,10 @@ void* armarSanguche(void *data) {
 }
 
 void * ejecutarReceta ( void * i) {
+	
         pthread_mutex_t mutex_salar ;
         pthread_mutex_t mutex_cocinarEnSarten ;
+	
 	// variables semaforos
 	sem_t sem_mezclar;
 	sem_t sem_salar;
@@ -246,7 +248,6 @@ void * ejecutarReceta ( void * i) {
         sem_t sem_armarSanguche1;
 	sem_t sem_armarSanguche2;
 	sem_t sem_armarSanguche3;
-	// crear variables semaforos aqui
 
 	// variables hilos
 	pthread_t p1;
@@ -258,7 +259,7 @@ void * ejecutarReceta ( void * i) {
 	pthread_t p7;
 	pthread_t p8;
 	pthread_t p9;
-	// crear variables hilos aqui
+
 
 	// numero del equipo (casteo el puntero a un int)
 	int p = * (( int *) i);
@@ -268,8 +269,6 @@ void * ejecutarReceta ( void * i) {
         usleep(5000);
 	// reservo memoria para el struct
 	struct parametro *pthread_data = malloc ( sizeof ( struct parametro));
-
-	// seteo los valores al estructura
 
 	// seteo numero de grupo
 	pthread_data-> equipo_param = p;
@@ -339,42 +338,42 @@ void * ejecutarReceta ( void * i) {
 	// creo los hilos a todos les paso el struct creado (el mismo a todos los hilos) ya que todos comparten los semaforos
     int rc;
         rc = pthread_create (& p1,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                cortar,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
+                            NULL ,                            // atributos del hilo
+                                cortar,                       // funcion a ejecutar
+                                pthread_data);                // parametros de la funcion a ejecutar, pasado por referencia
 
-        rc = pthread_create (& p2,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                mezclar,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
-        rc = pthread_create (& p3,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                salar,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
-        rc = pthread_create (& p4,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                agregarCarne,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
-        rc = pthread_create (& p5,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                empanarMilanesas,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
-	rc = pthread_create (& p6,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                cocinarEnSarten,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
-	rc = pthread_create (& p7,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                cortarExtras,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
-	rc = pthread_create (& p8,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                hornear,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
-	rc = pthread_create (& p9,                            // identificador unico
-                            NULL ,                           // atributos del hilo
-                                armarSanguche,              // funcion a ejecutar
-                                pthread_data);                     // parametros de la funcion a ejecutar, pasado por referencia
+        rc = pthread_create (& p2,                         
+                            NULL ,                          
+                                mezclar,              
+                                pthread_data);                  
+        rc = pthread_create (& p3,                           
+                            NULL ,                          
+                                salar,              
+                                pthread_data);               
+        rc = pthread_create (& p4,                           
+                            NULL ,                          
+                                agregarCarne,             
+                                pthread_data);                 
+        rc = pthread_create (& p5,                           
+                            NULL ,                          
+                                empanarMilanesas,             
+                                pthread_data);                     
+	rc = pthread_create (& p6,                           
+                            NULL ,                           
+                                cocinarEnSarten,             
+                                pthread_data);                   
+	rc = pthread_create (& p7,                            
+                            NULL ,                           
+                                cortarExtras,              
+                                pthread_data);                     
+	rc = pthread_create (& p8,                            
+                            NULL ,                           
+                                hornear,              
+                                pthread_data);                    
+	rc = pthread_create (& p9,                            
+                            NULL ,                           
+                                armarSanguche,              
+                                pthread_data);                    
 
 
 
@@ -410,7 +409,6 @@ void * ejecutarReceta ( void * i) {
 	sem_destroy (& sem_armarSanguche1);
 	sem_destroy (& sem_armarSanguche2);
 	sem_destroy (& sem_armarSanguche3);
-	// destruir demas semaforos
 
 	// salida del hilo
 	 pthread_exit ( NULL );
@@ -435,6 +433,7 @@ int  main ()
 	* equipoNombre2 = 2 ;
 	* equipoNombre3 = 3 ;
 	* equipoNombre4 = 4 ;
+	
 	// creo las variables los hilos de los equipos
 	pthread_t equipo1;
 	pthread_t equipo2;
@@ -448,17 +447,17 @@ int  main ()
                                 ejecutarReceta,              // funcion a ejecutar
                                 equipoNombre1);
 
-        rc = pthread_create (& equipo2,                      // identificador unico
-                            NULL ,                           // atributos del hilo
-                                ejecutarReceta,              // funcion a ejecutar
+        rc = pthread_create (& equipo2,                      
+                            NULL ,                           
+                                ejecutarReceta,              
                                 equipoNombre2);
-        rc = pthread_create (& equipo3,                      // identificador unico
-                            NULL ,                           // atributos del hilo
-                                ejecutarReceta,              // funcion a ejecutar
+        rc = pthread_create (& equipo3,                      
+                            NULL ,                           
+                                ejecutarReceta,              
                                 equipoNombre3);
-        rc = pthread_create (& equipo4,                      // identificador unico
-                            NULL ,                           // atributos del hilo
-                                ejecutarReceta,              // funcion a ejecutar
+        rc = pthread_create (& equipo4,                      
+                            NULL ,                           
+                                ejecutarReceta,              
                                 equipoNombre4);
 
 
