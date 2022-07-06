@@ -1,11 +1,11 @@
 # Minitp Semaforos 1S 2021
 ##### Introduccion:
+
+En este trabajo se demuestra la concurrencia y organizacion entre los equipos para con las acciones que deben realizar, para lograr su objetivo en simulacion a lo real del siguiente problema:
 En la cocina de Subway Argento compiten cuatro equipos de cocineros
 para ganarse el puesto de trabajo en el local. ¿Quién será el primero en
 entregar 1 sándwich de milanesa terminado, de 15 cm, al dueño del
-local?
-
-En este trabajo se demuestra la concurrencia y organizacion entre los equipos para con las acciones que deben realizar, para lograr su objetivo en simulacion a lo real.
+local?.
 
 
 ##### pseucodigo:
